@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Alert } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -10,7 +10,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { databases } from "../data";
@@ -24,10 +30,10 @@ const references = [
 export default function NewAutomationPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-slate-200 bg-white px-5 py-4 sm:px-8">
+      <header className="border-b border-border bg-card px-5 py-4 sm:px-8">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase text-slate-500">
+            <p className="text-xs font-medium uppercase text-muted-foreground">
               Step 1
             </p>
             <h1 className="mt-1 text-2xl font-semibold tracking-normal">
@@ -54,8 +60,8 @@ export default function NewAutomationPage() {
               className={cn(
                 "min-h-28 rounded-md border p-4 text-left transition",
                 database.active
-                  ? "border-slate-950 bg-slate-950 text-white"
-                  : "border-slate-200 bg-white text-slate-950 hover:border-slate-300",
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-foreground hover:border-input",
               )}
             >
               <div className="flex items-center justify-between gap-3">
@@ -64,7 +70,7 @@ export default function NewAutomationPage() {
                 </div>
                 <Badge
                   variant={database.active ? "default" : "secondary"}
-                  className={database.active ? "bg-white text-slate-950" : ""}
+                  className={database.active ? "bg-card text-foreground" : ""}
                 >
                   {database.env}
                 </Badge>
@@ -72,7 +78,7 @@ export default function NewAutomationPage() {
               <div
                 className={cn(
                   "mt-4 text-xs",
-                  database.active ? "text-slate-300" : "text-slate-500",
+                  database.active ? "text-primary-foreground/70" : "text-muted-foreground",
                 )}
               >
                 {database.host} / {database.status}
@@ -89,40 +95,49 @@ export default function NewAutomationPage() {
 
             <CardContent className="grid gap-5">
               <div className="grid gap-4 md:grid-cols-2">
-                <Label>
-                  프로그램 이름
-                  <Input defaultValue="발주현황조회" />
-                </Label>
-                <Label>
-                  비즈니스 서비스 이름
-                  <Input defaultValue="PurchaseOrderStatusService" />
-                </Label>
-                <Label>
-                  SP 이름
-                  <Input defaultValue="USP_PO_STATUS_LIST_S" />
-                </Label>
-                <Label>
-                  실행 정책
+                <div className="grid gap-2">
+                  <Label htmlFor="programName">프로그램 이름</Label>
+                  <Input id="programName" defaultValue="발주현황조회" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="serviceName">비즈니스 서비스 이름</Label>
+                  <Input
+                    id="serviceName"
+                    defaultValue="PurchaseOrderStatusService"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="spName">SP 이름</Label>
+                  <Input id="spName" defaultValue="USP_PO_STATUS_LIST_S" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="policy">실행 정책</Label>
                   <Select defaultValue="preview">
-                    <option value="preview">쿼리 생성 후 검토</option>
-                    <option value="draft">임시저장</option>
-                    <option value="approval">승인 요청</option>
+                    <SelectTrigger id="policy" className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="preview">쿼리 생성 후 검토</SelectItem>
+                      <SelectItem value="draft">임시저장</SelectItem>
+                      <SelectItem value="approval">승인 요청</SelectItem>
+                    </SelectContent>
                   </Select>
-                </Label>
+                </div>
               </div>
 
-              <Label>
-                엑셀 파일
-                <Input type="file" />
-              </Label>
+              <div className="grid gap-2">
+                <Label htmlFor="excelFile">엑셀 파일</Label>
+                <Input id="excelFile" type="file" />
+              </div>
 
-              <Label>
-                상세 지시명령
+              <div className="grid gap-2">
+                <Label htmlFor="instruction">상세 지시명령</Label>
                 <Textarea
+                  id="instruction"
                   className="min-h-36"
                   defaultValue="참조 프로그램의 조회 화면 패턴을 유지하고, 발주일자 기간 검색과 거래처 검색을 상단 조건으로 배치한다. 그리드는 발주번호 기준 내림차순으로 표시한다."
                 />
-              </Label>
+              </div>
             </CardContent>
           </Card>
 
@@ -132,13 +147,15 @@ export default function NewAutomationPage() {
             </CardHeader>
             <CardContent className="grid gap-4">
               {references.map(([label, value]) => (
-                <Label key={label}>
-                  {label}
+                <div key={label} className="grid gap-2">
+                  <Label>{label}</Label>
                   <Input defaultValue={value} />
-                </Label>
+                </div>
               ))}
               <Alert variant="warning" className="p-3">
-                운영 DB 반영은 검토 페이지 승인 이후에만 활성화됩니다.
+                <AlertDescription>
+                  운영 DB 반영은 검토 페이지 승인 이후에만 활성화됩니다.
+                </AlertDescription>
               </Alert>
             </CardContent>
           </Card>

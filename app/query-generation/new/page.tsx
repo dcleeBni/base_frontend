@@ -33,10 +33,10 @@ const logicChecks = [
 export default function QueryGenerationPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-slate-200 bg-white px-5 py-4 sm:px-8">
+      <header className="border-b border-border bg-card px-5 py-4 sm:px-8">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase text-slate-500">
+            <p className="text-xs font-medium uppercase text-muted-foreground">
               SP Process
             </p>
             <h1 className="mt-1 text-2xl font-semibold tracking-normal">
@@ -58,8 +58,8 @@ export default function QueryGenerationPage() {
               className={cn(
                 "min-h-28 rounded-md border p-4 text-left transition",
                 database.active
-                  ? "border-slate-950 bg-slate-950 text-white"
-                  : "border-slate-200 bg-white text-slate-950 hover:border-slate-300",
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-foreground hover:border-input",
               )}
             >
               <div className="flex items-center justify-between gap-3">
@@ -68,7 +68,7 @@ export default function QueryGenerationPage() {
                 </div>
                 <Badge
                   variant={database.active ? "default" : "secondary"}
-                  className={database.active ? "bg-white text-slate-950" : ""}
+                  className={database.active ? "bg-card text-foreground" : ""}
                 >
                   {database.env}
                 </Badge>
@@ -76,7 +76,7 @@ export default function QueryGenerationPage() {
               <div
                 className={cn(
                   "mt-4 text-xs",
-                  database.active ? "text-slate-300" : "text-slate-500",
+                  database.active ? "text-primary-foreground/70" : "text-muted-foreground",
                 )}
               >
                 {database.host} / {database.status}
@@ -97,27 +97,28 @@ export default function QueryGenerationPage() {
             <CardContent className="grid gap-5">
               <div className="grid gap-4 md:grid-cols-2">
                 {referenceFields.map(([label, value]) => (
-                  <Label key={label}>
-                    {label}
+                  <div key={label} className="grid gap-2">
+                    <Label>{label}</Label>
                     <Input defaultValue={value} />
-                  </Label>
+                  </div>
                 ))}
               </div>
 
-              <Label>
-                엑셀 파일
-                <Input type="file" />
-              </Label>
+              <div className="grid gap-2">
+                <Label htmlFor="spExcelFile">엑셀 파일</Label>
+                <Input id="spExcelFile" type="file" />
+              </div>
 
-              <Label>
-                상세 지시사항
+              <div className="grid gap-2">
+                <Label htmlFor="spInstruction">상세 지시사항</Label>
                 <Textarea
+                  id="spInstruction"
                   className="min-h-40"
                   defaultValue="발주현황조회 화면에서 사용할 조회 SP를 생성한다. 사업장 권한, 발주일자 기간, 거래처 조건을 반영하고 발주 상세 금액을 집계한다. 삭제 데이터는 제외하고 승인상태를 함께 반환한다."
                 />
-              </Label>
+              </div>
 
-              <div className="grid gap-3 rounded-md border border-slate-200 bg-slate-50 p-4 md:grid-cols-2">
+              <div className="grid gap-3 rounded-md border border-border bg-muted/50 p-4 md:grid-cols-2">
                 {logicChecks.map((label) => (
                   <label key={label} className="flex items-center gap-2 text-sm">
                     <input type="checkbox" defaultChecked />
@@ -141,12 +142,12 @@ export default function QueryGenerationPage() {
                   ["4", "SP 쿼리 생성 및 검토", "대기"],
                 ].map(([step, title, status]) => (
                   <div key={step} className="flex gap-3">
-                    <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-slate-950 text-xs font-semibold text-white">
+                    <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary text-xs font-semibold text-primary-foreground">
                       {step}
                     </div>
                     <div className="min-w-0">
                       <div className="text-sm font-medium">{title}</div>
-                      <div className="mt-1 text-xs text-slate-500">
+                      <div className="mt-1 text-xs text-muted-foreground">
                         {status}
                       </div>
                     </div>
@@ -159,7 +160,7 @@ export default function QueryGenerationPage() {
               <CardHeader>
                 <CardTitle>SP SQL 미리보기</CardTitle>
               </CardHeader>
-              <pre className="max-h-[360px] overflow-auto p-5 text-xs leading-6 text-slate-800">
+              <pre className="max-h-[360px] overflow-auto p-5 text-xs leading-6 text-foreground">
                 <code>{spGeneratedSql}</code>
               </pre>
             </Card>

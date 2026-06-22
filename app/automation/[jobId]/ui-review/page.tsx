@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Alert } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -26,10 +26,10 @@ export default async function UiReviewPage({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-slate-200 bg-white px-5 py-4 sm:px-8">
+      <header className="border-b border-border bg-card px-5 py-4 sm:px-8">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase text-slate-500">
+            <p className="text-xs font-medium uppercase text-muted-foreground">
               Step 2 / {job.displayId}
             </p>
             <h1 className="mt-1 text-2xl font-semibold tracking-normal">
@@ -58,7 +58,7 @@ export default async function UiReviewPage({
         <section className="grid gap-4 md:grid-cols-4">
           {analysis.map(([label, value]) => (
             <Card key={label} className="p-4">
-              <div className="text-xs font-medium text-slate-500">{label}</div>
+              <div className="text-xs font-medium text-muted-foreground">{label}</div>
               <div className="mt-2 min-h-10 text-sm font-semibold leading-5">
                 {value}
               </div>
@@ -68,16 +68,16 @@ export default async function UiReviewPage({
 
         <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
           <Card>
-            <div className="flex flex-col gap-3 border-b border-slate-200 px-5 py-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col gap-3 border-b border-border px-5 py-4 md:flex-row md:items-center md:justify-between">
               <div>
                 <h2 className="text-base font-semibold">UI SQL 미리보기</h2>
-                <div className="mt-1 text-sm text-slate-500">
+                <div className="mt-1 text-sm text-muted-foreground">
                   화면 메타 테이블에 입력되는 쿼리 / 대상 DB: {job.database}
                 </div>
               </div>
               <Button variant="outline">복사</Button>
             </div>
-            <pre className="max-h-[560px] overflow-auto p-5 text-xs leading-6 text-slate-800">
+            <pre className="max-h-[560px] overflow-auto p-5 text-xs leading-6 text-foreground">
               <code>{generatedSql}</code>
             </pre>
           </Card>
@@ -96,7 +96,7 @@ export default async function UiReviewPage({
                   ["상태", job.status],
                 ].map(([label, value]) => (
                   <div key={label}>
-                    <dt className="text-xs font-medium text-slate-500">
+                    <dt className="text-xs font-medium text-muted-foreground">
                       {label}
                     </dt>
                     <dd className="mt-1 break-all font-semibold">{value}</dd>
@@ -107,8 +107,10 @@ export default async function UiReviewPage({
             </Card>
 
             <Alert variant="warning">
-              이 페이지는 화면을 그리기 위한 UI 메타 쿼리 검토 단계입니다.
-              ERP 업무 로직 SP는 별도의 쿼리 생성 페이지에서 만듭니다.
+              <AlertDescription>
+                이 페이지는 화면을 그리기 위한 UI 메타 쿼리 검토 단계입니다. ERP
+                업무 로직 SP는 별도의 쿼리 생성 페이지에서 만듭니다.
+              </AlertDescription>
             </Alert>
           </div>
         </section>
